@@ -1,0 +1,249 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CS 3410 Components Guide</title>
+<link rel="stylesheet" href="CS%203410%20Components%20Guide_files/bootstrap.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+  <h1>CS 3410 Components Library Guide</h1>
+
+  <hr>
+
+  <p>The "CS3410 Components" library will only appear if you are using 
+the most recent version of Logisim, downloaded from the course website. 
+Please ensure that you are using the correct version. If so, you should 
+have a folder in your sidebar containing the following components:</p>
+
+  <h3 id="registerfile">Register File.</h3>
+  <div class="row">
+    <div class="col-md-8">
+      <p>
+        A 32-bit wide by 32-registers deep register file. Register
+        <code>$0</code> is hard-wired to zero at all times, and writes to
+        <code>$0</code> are ignored. You can rely on register <code>$0</code>
+        always containing 0, and do not need to test that its value does not
+        change. Inputs <code>rA</code> and <code>rB</code> are used to select
+        register values to output on the <code>A</code> and <code>B</code>
+        outputs. When the clock is triggered, if <code>WE</code> is high, the
+        data value at input <code>W</code> is stored in register
+        <code>rW</code>. The register file can be configured to use rising
+        clock edges as trigger (the default), falling edge, or to be level
+        sensitive.
+      </p>
+    </div>
+    <div class="col-md-4">
+      <img class="img-responsive" src="CS%203410%20Components%20Guide_files/regfile.png" alt="register file" width="171" height="185">
+    </div>
+  </div>
+
+  <h3 id="rom">MIPS Program ROM.</h3>
+  <div class="row">
+    <div class="col-md-8">
+      <p>
+        A 32-bit wide byte-addressed ROM, with built-in MIPS assembler. Use the
+        attributes panel to load a MIPS assembly file into the ROM. The
+        <code>PC</code> input specifies the address of the current instruction,
+        and must be a multiple of 4. The output is the 32-bit machine code
+        instruction at the PC address, or an error if the PC is invalid.
+        Reading addresses outside the range of code supplied by the assembly
+        file will cause the ROM to output zero, which happens to encode a no-op
+        in MIPS. The assembly language is in the format described below. When
+        we say that the instruction ROM is byte-addressed memory, we mean that
+        the instruction ROM takes an address A as input, advances A bytes into
+        its memory (remember, 1 byte = 8 bits), and outputs the 32-bit
+        instruction that starts at the resulting position. 32 bits is 4 bytes,
+        which is why the PC normally increments by 4 every cycle: it's simply
+        going to the next instruction.
+      </p>
+    </div>
+    <div class="col-md-4">
+      <img class="img-responsive" src="CS%203410%20Components%20Guide_files/rom.png" alt="rom" width="247" height="126">
+    </div>
+  </div>
+
+  <h3 id="alu">MIPS ALU.</h3>
+  <div class="row">
+    <div class="col-md-8">
+      <p>
+        Computes a result as follows. You do not need to test the provided ALU,
+        and can assume it will work exactly as specified.
+      </p>
+      <table class="table table-condensed table-hover table-bordered" style="font-size: 80%; font-family: monospace">
+        <thead>
+          <tr><td>Op  </td><td>name                  </td><td>C                                       </td></tr>
+        </thead>
+        <tbody>
+          <tr><td>000x</td><td>shift left            </td><td>C = B &lt;&lt; Sa;                      </td></tr>
+          <tr><td>001x</td><td>add                   </td><td>C = A + B                               </td></tr>
+          <tr><td>0100</td><td>shift right logical   </td><td>C = B &gt;&gt;&gt; Sa                   </td></tr>
+          <tr><td>0101</td><td>shift right arithmetic</td><td>C = B &gt;&gt; Sa                       </td></tr>
+          <tr><td>011x</td><td>subtract              </td><td>C = A - B                               </td></tr>
+          <tr><td>1000</td><td>and                   </td><td>C = A &amp; B                           </td></tr>
+          <tr><td>1010</td><td>or                    </td><td>C = A | B                               </td></tr>
+          <tr><td>1100</td><td>xor                   </td><td>C = A ^ B                               </td></tr>
+          <tr><td>1110</td><td>nor                   </td><td>C = ~(A | B)                            </td></tr>
+          <tr><td>1001</td><td>eq                    </td><td>C = (A == B) ? 000...0001 : 000...0000  </td></tr>
+          <tr><td>1011</td><td>ne                    </td><td>C = (A != B) ? 000...0001 : 000...0000  </td></tr>
+          <tr><td>1101</td><td>gtz                   </td><td>C = (A &gt; 0) ? 000...0001 : 000...0000</td></tr>
+          <tr><td>1111</td><td>lez                   </td><td>C = (A ≤ 0) ? 000...0001 : 000...0000</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-4">
+      <img class="img-responsive" src="CS%203410%20Components%20Guide_files/alu.png" alt="alu" width="64" height="103">
+    </div>
+  </div>
+
+  <h3 id="incrementer">Incrementer.</h3>
+  <div class="row">
+    <div class="col-md-8">
+      <p>
+        An adjustable-width incrementer. Takes its input <code>A</code> on the
+        left and outputs <code>A+1</code> on the right. You must use this
+        increment for your Program Counter (PC); you cannot build your own
+        adder to increment the PC. Also, only ONE incrementer is allowed.
+      </p>
+    </div>
+    <div class="col-md-4">
+      <img class="img-responsive" src="CS%203410%20Components%20Guide_files/incr.png" alt="incrementer" width="34" height="32">
+    </div>
+  </div>
+
+  <h3 id="video">LCD Video.</h3>
+  <div class="row">
+    <div class="col-md-8">
+      <p>
+        If <code>WE</code> is high on the rising edge of
+        <code>CLK</code>, writes a pixel on the LCD screen at the location
+        given by the 7-bit unsigned <code>X</code> and <code>Y</code>
+        coordinates. The pixel color is specified by 16-bit <code>RGB</code>
+        input (in 5-5-5 format). The <code>RST</code> input resets the LCD
+        screen. With some cleverness, you can redirect memory writes to this
+        device to let your program draw on the LCD screen. Logisim also comes
+        with some interesting input and output devices which can be used
+        similarly.
+      </p>
+    </div>
+    <div class="col-md-4">
+      <img class="img-responsive" src="CS%203410%20Components%20Guide_files/video.png" alt="lcd video" width="284" height="314">
+    </div>
+  </div>
+
+  <h3 id="ram">RAM.</h3>
+  <div class="row">
+    <div class="col-md-8">
+      <h4>Inputs and Outputs</h4>
+      <ul>
+        <li><code>A</code> is the word-address. Each line in the RAM component is a word (four bytes)
+        in memory, and has a unique address. As in the example figure to the right,
+        <code>A</code> = 0x00002 refers to slot 00002 in the RAM component, which contains a full
+        word. However, for a given address in RAM, if you want to retrieve a specific byte
+        or halfword in the address, you need to use the selector bits (described below). By
+        default, the component's address width is 20 bits (which means that, by default, it
+        can store 2^20 words = 4 * 2^20 bytes = 4MB).</li>
+
+        <li><code>D</code> contains the data to be stored in RAM. Depending on how <code>sel</code> is set,
+        only certain bytes within <code>D</code> will be written.</li>
+
+        <li><code>str</code> is the store bit. You can think of it as Write Enable. When str = 1,
+        RAM will write the value on <code>D</code> to address <code>A</code> according to the sel bits.</li>
+
+        <li><code>sel</code> is for the selector bits. As mentioned above, bits 0..7 of <code>D</code>
+        correspond to <code>sel</code> = 0001, bits 8..15 correspond to <code>sel</code> = 0010, bits
+        16..23 to 0100, and bits 24..31 to 1000. <code>sel</code> accepts other combinations like
+        1100 (to grab the upper halfword), 1111 (to grab the full word), or even something
+        wacky like 1010.</li>
+
+        <li><code>ld</code> is the load bit. Data Out <code>D</code> always sets floating values (X's) along the
+        wire unless the appropriate selector bits are set and ld = 1.</li>
+
+        <li><code>clr</code> clears all of RAM whenever it is 1.</li>
+      </ul>
+    </div>
+    <div class="col-md-4">
+      <img class="img-responsive" src="CS%203410%20Components%20Guide_files/ramInputOutput.png" alt="ram inputs/output" width="377" height="242">
+    </div>
+  </div>
+
+  <h4>Using the Byte Selector</h4>
+  <div class="row">
+    <div class="col-md-8">
+      <p>
+        As previously mentioned, address <code>A</code> gets us to the word in memory. However, we need
+        to use <code>sel</code> to determine which bytes in the word we want to write to or read from.
+        The Byte selector is 4 bits, and you can think of each bit as a read/write enable for each
+        of the four bytes in the word.
+        <br>
+        Specifically, bit 0 of <code>sel</code> enables the first byte from the right in the RAM component.
+        When writing to RAM, bits 0 to 7 of DataIn are written to this byte, and when reading from RAM,
+        the byte's value gets read out to bits 0 to 7 of DataOut. Bit 1 of <code>sel</code> enables the
+        second byte from the right, and corresponds with bits 8 to 15 of DataIn and DataOut. Bit 2 enables
+        the third byte from the right and corresponds with bits 16 to 23, and bit 3 enables the fourth byte,
+        and corresponds with bits 24 to 31.
+      </p>
+    </div>
+  </div>
+
+  <h4>Storing</h4>
+  <div class="row">
+    <div class="col-md-8">
+      <p>
+        Writing into the RAM component requires that the <code>str</code> bit is set to 1.
+        <br>
+        In the example to the right, DataIn is set so that a hex value 0xf1 is in the bottom line (bits 7..0),
+        0xf2 is in the second line (bits 15..8), 0xf3 is in the third line (bits 23..16), and 0xf4 is
+        in the top line (bits 24..31). The gif demonstrates how to write different bytes or
+        halfwords to the RAM.
+        <br>
+        When you want to write a byte to a location in RAM, pay attention that you place the
+        byte-values in DataIn correctly with selector bits. In the example above, if you wanted to
+        write 0xf1 to left-most byte, you would need to put 0xf1 in bits 24..31 in DataIn and
+        set <code>sel</code> = 1000.
+      </p>
+    </div>
+    <div class="col-md-4">
+      <img class="img-responsive" src="CS%203410%20Components%20Guide_files/selStoreSmall.gif" alt="selector store" width="434" height="274">
+    </div>
+  </div>
+
+  <h4>Loading</h4>
+  <div class="row">
+    <div class="col-md-8">
+      <p>
+        Reading from the RAM component requires that the <code>ld</code> bit is set to 1.
+        <br>
+        Loading is a bit more straightforward. Just be sure that when you are reading a byte from memory
+        that you retrieve the byte from the right bits on DataOut. For example, if you were only selecting
+        with <code>sel</code> = 0100, then you'd have to make sure that, when you're splitting DataOut, that you
+        isolate the correct byte (bits 23..16).
+      </p>
+    </div>
+    <div class="col-md-4">
+      <img class="img-responsive" src="CS%203410%20Components%20Guide_files/selLoadSmall.gif" alt="selector load" width="434" height="274">
+    </div>
+  </div>
+
+  <h4>A Note on Implementing Byte Addressed Memory</h4>
+  <div class="row">
+    <div class="col-md-8">
+      <p>
+        All the addresses that we deal with in the MIPS instruction set are expressed in terms of <i>byte addresses</i>.
+        This means that address 0x0000 refers to the first byte in 
+memory, and 0x0001 the second byte, and so on.
+        Since every word has four bytes (in other words, since every 
+four bytes is a new word), then 0x0000 still refers to the first word,
+        but the second word is at address 0x0004.
+        <br>
+        It is key that you understand that the RAM is word addressed. It
+ is an error to pass the raw byte-address into the A input.
+      </p>
+    </div>
+  </div>
+  <div style="height: 100px;"></div>
+</div>
+
+
+</body></html>
